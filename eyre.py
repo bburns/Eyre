@@ -9,13 +9,18 @@ Date: 2014-02-27
 import sys
 import string
 import re
+print string.letters
 
-inputfile = "ghost.txt"
-allow = string.letters
+inputfile = "alice.txt"
+allowed = string.letters
+# allowed = string.letters + " '\\-"
 dictfile = "linuxwords.txt"
 
+# regexp = "[^%s][^ %s]" % (string.letters, allowed)
 
-def readWords(filename):
+
+
+def readWords(filename, lower=True):
     
     "Read unique words from a file"
     
@@ -24,8 +29,9 @@ def readWords(filename):
     f = open(filename, 'r')
     for line in f.readlines():
         line = line.strip()
-        line = line.lower()
-        line = re.sub('[^%s ]' % allow, '', line)
+        if lower: line = line.lower()
+        line = re.sub('[^%s ]' % allowed, '', line)
+        # line = re.sub(regexp, '', line)
         words = line.split()
         for word in words:
             wordset.add(word)
@@ -41,12 +47,14 @@ def main():
     # get unique words
     print 'reading text...'
     words = readWords(inputfile)
+    # words = readWords(inputfile, False)
     print words[0:5]
     print
     
     # get dictionary words
     print 'reading dictionary...'
     dictionary = readWords(dictfile)
+    # dictionary = readWords(dictfile, False)
     print dictionary[0:5]
     print
     dictionary = set(dictionary) # make a hash
